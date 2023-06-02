@@ -1,4 +1,12 @@
 # Starter pipeline
+- task: DROPS-Deploy-task@1
+  inputs:
+    dropsServer: 'AMA_Main_skytap'
+    applicationCode: 'BILL_APP'
+    releaseNumber: '12.0.0.0'
+    environment: 'DEV_BILLAPP'
+    process: '$(Build.Repository.Name)_$(Environment.Name)'
+    transactionId: '1264532'
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
