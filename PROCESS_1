@@ -1,0 +1,92 @@
+---
+process:
+  header:
+    code: ASP-AZURE
+    environment: DEV_BILLAPP
+    application: BILL_APP
+  version: 1
+  rollbackOnError: false
+  deploymentActivities:
+  - identifier: 'Activity #1-updated'
+    component: Web_Tomcat
+    infrastructureItem: "FrontEnd_Windows"
+    stages:
+    - type: 300
+      actions:
+      - identifier: LogMessageAction#1
+        order: 1
+        options:
+          applyToList: true
+          filePattern: ".*"
+          failOnError: false
+        script:
+          header:
+            id: drops-software.log.message
+          version: '1.0'
+        parameters:
+        - name: Log level
+          value: INFO
+        - name: Message
+          value: Process As Code test
+        - name: Details
+          value: Here is an action created by As Code Process
+      - identifier: LogMessageAction#2
+        order: 1
+        options:
+          applyToList: true
+          filePattern: ".*"
+          failOnError: false
+        script:
+          header:
+            id: drops-software.log.message
+          version: '1.0'
+        parameters:
+        - name: Log level
+          value: ${infra.config.props.myAzureDevOpsProperty}
+        - name: Message
+          value: ${environment.props.aznewkey}
+        - name: Details
+          value: Here is an action created by As Code Process          
+validations:
+- reference: process
+  validation:
+    beforeStarting: true
+    subject: Here is a Project validation Subject
+    comment: Here is a Project validation Comment
+    commentRequired: false
+    roles:
+    - entity: application
+      roleName: Workflow Manager
+- reference: 'activity/Activity #1-updated'
+  validation:
+    beforeStarting: false
+    subject: "Update #1"
+    comment: Here is an Deployment Activity Validation Comment
+    commentRequired: false
+    roles:
+    - entity: application
+      roleName: Workflow Manager
+notifications:
+- reference: process
+  notification:
+    event: 0
+    subject: Here is a Project NOTIFICATION Subject
+    body: Here is a Project NOTIFICATION Comment
+    recipients:
+    - email: amabrouk@arcadsoftware.com
+    roles:
+    - entity: application
+      roleName: Workflow Manager
+- reference: 'activity/Activity #1'
+  notification:
+    event: 1
+    subject: Here is an Deployment Activity NOTIFICATION Subject
+    body: Here is an Deployment Activity NOTIFICATION body
+    roles:
+    - entity: application
+      roleName: Workflow Manager
+executionScheme:
+- parentActivity: activity/initialization
+  childActivity: 'activity/Activity #1-updated'
+- parentActivity: 'activity/Activity #1-updated'
+  childActivity: activity/finalization
