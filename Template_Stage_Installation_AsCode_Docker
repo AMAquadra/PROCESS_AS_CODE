@@ -1,0 +1,39 @@
+---
+template:
+  type: 5
+  header:
+    identifier: 'TPLST-Installation-sample#1'
+  version: 1
+  stage:
+    type: 300      
+    actions:
+      - identifier: Pull_image
+        order: 1
+        options:
+          applyToList: true
+          filePattern: ".*"
+          failOnError: true
+        script:
+          header:
+            id: Docker
+          version: '1.0'
+        parameters:
+        - name: Login
+          value: ${environment.props.login_docker}
+        - name: Docker Artifact
+          value: ${drop.artifact.target.file}
+      - identifier: Run_image
+        order: 1
+        options:
+          applyToList: true
+          filePattern: ".*"
+          failOnError: true
+        script:
+          header:
+            id: Docker_run
+          version: '1.0'
+        parameters:
+        - name: Login
+          value: ${environment.props.login_docker}
+        - name: Docker Artifact
+          value: ${drop.artifact.target.file}
