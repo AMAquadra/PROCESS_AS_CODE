@@ -1,0 +1,23 @@
+---
+process:
+  header:
+    code: ASCODE_Docker_Rexel_TST_usingTemplate
+    application: Rexel_app
+    environment: TST_Docker
+    text: ASCODE_Docker_Rexel_TST
+  version: 1
+  rollbackOnError: false
+  deploymentActivities:
+  - identifier: Linux_target
+    component: Docker_img
+    infrastructureItem: 10.0.0.4_Linux
+    stage:
+      useTemplate: true
+      template:
+        identifier: 'TPLST-Installation-sample#1'
+        version: 1
+executionScheme:
+- parentActivity: activity/initialization
+  childActivity: 'activity/Linux_target'
+- parentActivity: 'activity/Linux_target'
+  childActivity: activity/finalization
